@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.amazon.jonnu.csgotracker.model.Player;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -26,7 +27,6 @@ public class HLTV implements CrappyScheduleInterface {
     public List<TeamScheduleResult> getUpcomingMatches() {
 
         try {
-
             // All Astralis matches.
             final Document document = Jsoup.connect("https://www.hltv.org/matches?team=6665")
                     .method(Connection.Method.GET)
@@ -51,7 +51,29 @@ public class HLTV implements CrappyScheduleInterface {
             log.error("err", exception);
             return Collections.emptyList();
         }
+    }
 
+    public List<Player> getRoster() {
+
+        try {
+            // All Astralis players.
+            final Document document = Jsoup.connect("https://www.hltv.org/team/6665/astralis")
+                    .method(Connection.Method.GET)
+                    .userAgent("github.com/jonnu/csgotracker; Alexa Skill; jonnu <jon@ellis-jones.org>")
+                    .followRedirects(true)
+                    .get();
+
+            return document.select(".bodyshot-team > a").stream()
+                    .map(element -> Player.builder()
+                            .spokenIdentifier(element.attr("title"))
+                            .displayIdentifier(element.attr("title"))
+                            .build())
+                    .collect(Collectors.toList());
+
+        } catch (IOException exception) {
+            log.error("err", exception);
+            return Collections.emptyList();
+        }
     }
 
     private static ZonedDateTime convertEpochToLocalDateTime(final String epochString) {
