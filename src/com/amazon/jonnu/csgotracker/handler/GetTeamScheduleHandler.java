@@ -45,8 +45,12 @@ public class GetTeamScheduleHandler implements RequestHandler {
 
         TeamScheduleResult result = storage.getUpcomingMatches().get(0);
 
-        final String speechString = String.format("%s will play %s at %s", result.getQueriedTeam().getSpokenIdentifier(), result.getOpponentTeam().getSpokenIdentifier(),
-                result.getScheduledDateTime().format(DateTimeFormatter.ISO_DATE_TIME));
+        final String speechString = String.format("%s will play %s at %s on %s",
+                result.getQueriedTeam().getSpokenIdentifier(),
+                result.getOpponentTeam().getSpokenIdentifier(),
+                result.getDateTime().format(DateTimeFormatter.ISO_DATE_TIME),
+                result.getMap()
+        );
 
         return input.getResponseBuilder()
                 .withSpeech(speechString)

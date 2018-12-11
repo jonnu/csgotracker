@@ -10,13 +10,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.amazon.jonnu.csgotracker.model.Map;
 import com.amazon.jonnu.csgotracker.model.Team;
 import com.amazon.jonnu.csgotracker.model.TeamScheduleResult;
 
+@Slf4j
 public class HLTV implements CrappyScheduleInterface {
 
     public List<TeamScheduleResult> getUpcomingMatches() {
@@ -24,19 +28,27 @@ public class HLTV implements CrappyScheduleInterface {
         try {
 
             // All Astralis matches.
-            final Document document = Jsoup.connect("https://www.hltv.org/matches?team=6665").get();
+            final Document document = Jsoup.connect("https://www.hltv.org/matches?team=6665")
+                    .method(Connection.Method.GET)
+                    .userAgent("github.com/jonnu/csgotracker; Alexa Skill; jonnu <jon@ellis-jones.org>")
+                    .followRedirects(true)
+                    .get();
+
             return document.select(".matches .upcoming-matches a").stream()
+                    //.peek(System.out::println)
                     .map(element -> {
-                        Elements teamElements = element.select("td.team-cell > .team");
+                        Elements teamElements = element.select("td.team-cell .team");
                         return TeamScheduleResult.builder()
                                 .queriedTeam(Team.builder().spokenIdentifier(teamElements.get(0).text()).displayIdentifier(teamElements.get(0).text()).build())
                                 .opponentTeam(Team.builder().spokenIdentifier(teamElements.get(1).text()).displayIdentifier(teamElements.get(1).text()).build())
-                                .scheduledDateTime(convertEpochToLocalDateTime(element.selectFirst("td.time > .time").text()))
+                                .dateTime(convertEpochToLocalDateTime(element.selectFirst("td.time > .time").attr("data-unix")))
+                                .map(Map.resolveFromShorthand(element.selectFirst("td.star-cell .map-text").text()))
                                 .build();
                     })
                     .collect(Collectors.toList());
 
         } catch (IOException exception) {
+            log.error("err", exception);
             return Collections.emptyList();
         }
 

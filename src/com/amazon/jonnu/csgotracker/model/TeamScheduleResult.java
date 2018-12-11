@@ -10,5 +10,6 @@ import lombok.Value;
 public class TeamScheduleResult {
     private final Team queriedTeam;
     private final Team opponentTeam;
-    private final ZonedDateTime scheduledDateTime;
+    private final ZonedDateTime dateTime;
+    private final Map map;
 }
