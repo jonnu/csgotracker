@@ -17,8 +17,8 @@ public class LaunchRequestHandler implements RequestHandler {
     }
 
     @Override
-    public Optional<Response> handle(HandlerInput input) {
-        String speechText = "this is firs text";
+    public Optional<Response> handle(final HandlerInput input) {
+        String speechText = "this is first text";
         String repromptText = "please, this is the second text";
         return input.getResponseBuilder()
                 .withSpeech(speechText)

@@ -17,8 +17,8 @@ public class HelpIntentHandler implements RequestHandler {
 
     @Override
     public Optional<Response> handle(final HandlerInput input) {
-        String speechText = "You can tell me your favorite color by saying, my favorite color is red";
-        String repromptText = "Please tell me your favorite color by saying, my favorite color is red";
+        String speechText = "Give me the food that I want.";
+        String repromptText = "Please give me the food that I want. Thank you.";
         return input.getResponseBuilder()
                 .withSpeech(speechText)
                 .withReprompt(repromptText)
