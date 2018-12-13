@@ -49,7 +49,7 @@ public class GetTeamScheduleHandler implements RequestHandler {
                 result.getQueriedTeam().getSpokenIdentifier(),
                 result.getOpponentTeam().getSpokenIdentifier(),
                 result.getDateTime().format(DateTimeFormatter.ISO_DATE_TIME),
-                result.getMap()
+                result.getMap().getSpokenIdentifier()
         );
 
         return input.getResponseBuilder()
