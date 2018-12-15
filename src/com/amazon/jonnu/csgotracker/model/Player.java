@@ -6,8 +6,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class Player extends Person {
+public class Player {
     @NonNull public final String spokenIdentifier;
     @NonNull public final String displayIdentifier;
-
 }

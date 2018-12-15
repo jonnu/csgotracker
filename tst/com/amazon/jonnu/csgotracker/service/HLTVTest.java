@@ -2,11 +2,12 @@ package com.amazon.jonnu.csgotracker.service;
 
 import java.util.List;
 
-import com.amazon.jonnu.csgotracker.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.amazon.jonnu.csgotracker.model.Player;
 import com.amazon.jonnu.csgotracker.model.TeamScheduleResult;
+import com.amazon.jonnu.csgotracker.service.jsoup.ConnectionFactoryImpl;
 
 class HLTVTest {
 
@@ -14,7 +15,7 @@ class HLTVTest {
 
     @BeforeEach
     void before() {
-        fixture = new HLTV();
+        fixture = new HLTV(new ConnectionFactoryImpl());
     }
 
     @Test
