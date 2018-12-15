@@ -1,6 +1,7 @@
 package com.amazon.jonnu.csgotracker.model;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Value;
@@ -11,5 +12,6 @@ public class TeamScheduleResult {
     private final Team queriedTeam;
     private final Team opponentTeam;
     private final ZonedDateTime dateTime;
-    private final Map map;
+    // TODO: encapsulate as MapList model.
+    private final List<Map> map;
 }

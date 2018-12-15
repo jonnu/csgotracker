@@ -16,6 +16,7 @@ import com.amazon.jonnu.csgotracker.handler.GetTeamScheduleHandler;
 import com.amazon.jonnu.csgotracker.handler.HelpIntentHandler;
 import com.amazon.jonnu.csgotracker.handler.LaunchRequestHandler;
 import com.amazon.jonnu.csgotracker.handler.SessionEndedRequestHandler;
+import com.amazon.jonnu.csgotracker.injection.module.HLTVModule;
 import com.amazon.jonnu.csgotracker.service.CrappyScheduleInterface;
 import com.amazon.jonnu.csgotracker.service.EntityResolver;
 import com.amazon.jonnu.csgotracker.service.EntityResolverImpl;
@@ -51,6 +52,8 @@ public class CSGOTrackerModule extends AbstractModule {
         bind(CrappyScheduleInterface.class).to(HLTV.class);
 
         bind(AlexaSettings.class).to(AlexaSettingsImpl.class);
+
+        install(new HLTVModule());
     }
 
     @Provides

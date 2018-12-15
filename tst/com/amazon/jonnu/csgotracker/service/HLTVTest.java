@@ -20,7 +20,7 @@ class HLTVTest {
 
     @Test
     void doTest() {
-        List<TeamScheduleResult> results = fixture.getUpcomingMatches();
+        List<TeamScheduleResult> results = fixture.getUpcomingMatches(7801);
         results.forEach(System.out::println);
     }
 

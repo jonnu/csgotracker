@@ -5,12 +5,14 @@ import static com.amazon.ask.request.Predicates.intentName;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.TimeZone;
 
 import com.google.inject.Inject;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
@@ -22,7 +24,9 @@ import com.amazon.jonnu.csgotracker.service.CrappyScheduleInterface;
 import com.amazon.jonnu.csgotracker.service.EntityResolver;
 import com.amazon.jonnu.csgotracker.service.alexa.AlexaSettings;
 import com.amazon.jonnu.csgotracker.service.alexa.model.SettingsRequest;
+import com.amazon.jonnu.csgotracker.storage.hltv.Team;
 
+@Slf4j
 public class GetTeamScheduleHandler implements RequestHandler {
 
     private static final String SLOT_TEAM_IDENTIFIER = "TeamIdentifier";
@@ -30,11 +34,13 @@ public class GetTeamScheduleHandler implements RequestHandler {
     private final EntityResolver resolver;
     private final CrappyScheduleInterface storage;
     private final AlexaSettings alexaSettings;
+    private final Team team;
 
     private static final PrettyTime prettyTime = new PrettyTime();
 
     @Inject
-    public GetTeamScheduleHandler(@NonNull final EntityResolver resolver, @NonNull final CrappyScheduleInterface storage, @NonNull final AlexaSettings alexaSettings) {
+    public GetTeamScheduleHandler(@NonNull final EntityResolver resolver, @NonNull final CrappyScheduleInterface storage, @NonNull final AlexaSettings alexaSettings, @NonNull final Team team) {
+        this.team = team;
         this.resolver = resolver;
         this.storage = storage;
         this.alexaSettings = alexaSettings;
@@ -55,19 +61,42 @@ public class GetTeamScheduleHandler implements RequestHandler {
                 .build())
                 .orElse(TimeZone.getDefault());
 
+        log.info("Resolved timeZone: {}", timeZone.getDisplayName());
+
         final Optional<Slot> teamIdentifier = resolver.getSlotByName(input, SLOT_TEAM_IDENTIFIER);
 
         if (!teamIdentifier.isPresent()) {
             return Optional.empty();
         }
 
-        TeamScheduleResult result = storage.getUpcomingMatches().get(0);
+        log.info("Resolved team as {}", teamIdentifier.get());
 
-        final String speechString = String.format("%s will play %s at %s on %s",
+        // Map team to hltv ID.
+        Optional<Integer> hltvIdentifier = team.getIdentifier(teamIdentifier.get().getValue());
+        if (!hltvIdentifier.isPresent()) {
+            log.error("Could not resolve {} to an identifier.", teamIdentifier.get().getValue());
+            return input.getResponseBuilder()
+                    .withReprompt("Could not understand team " + teamIdentifier.get().getValue())
+                    .build();
+        }
+
+        log.info("Calling storage for team with numerical identifier {}", hltvIdentifier.get());
+        List<TeamScheduleResult> upcoming = storage.getUpcomingMatches(hltvIdentifier.get());
+
+        if (upcoming.isEmpty()) {
+            return input.getResponseBuilder()
+                    .withSpeech("No upcoming matches found.")
+                    .withShouldEndSession(true)
+                    .build();
+        }
+
+        TeamScheduleResult result = upcoming.get(0);
+
+        final String speechString = String.format("%s will play %s in %s on %s",
                 result.getQueriedTeam().getSpokenIdentifier(),
                 result.getOpponentTeam().getSpokenIdentifier(),
                 getPrettyTime(result.getDateTime(), timeZone),
-                result.getMap().getSpokenIdentifier()
+                result.getMap().get(0).getSpokenIdentifier()
         );
 
         return input.getResponseBuilder()

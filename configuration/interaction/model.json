@@ -1,0 +1,133 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "c. s. go tracker",
+      "intents": [
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": [
+            "cancel"
+          ]
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": [
+            "help"
+          ]
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": [
+            "stop"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": [
+            "home"
+          ]
+        },
+        {
+          "name": "AMAZON.ReadAction<object@Calendar>",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.SearchAction<object@Calendar>",
+          "samples": []
+        },
+        {
+          "name": "TeamScheduleIntent",
+          "slots": [
+            {
+              "name": "TeamIdentifier",
+              "type": "TeamIdentifier"
+            },
+            {
+              "name": "TimeIndicator",
+              "type": "AMAZON.TIME"
+            }
+          ],
+          "samples": [
+            "are {TeamIdentifier} playing on {TimeIndicator}",
+            "are {TeamIdentifier} playing {TimeIndicator}",
+            "who are {TeamIdentifier} playing {TimeIndicator}",
+            "who are {TeamIdentifier} playing",
+            "if {TeamIdentifier} are playing or not",
+            "when {TeamIdentifier} are playing",
+            "when {TeamIdentifier} play their next game",
+            "when is {TeamIdentifier} next game",
+            "who are {TeamIdentifier} playing next",
+            "when does {TeamIdentifier} play",
+            "when do {TeamIdentifier} play next"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "name": "TeamIdentifier",
+          "values": [
+            {
+              "name": {
+                "value": "Natus Vincere",
+                "synonyms": [
+                  "navi"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Astralis"
+              }
+            },
+            {
+              "name": {
+                "value": "fnatic",
+                "synonyms": [
+                  "fanatic"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "mousesports",
+                "synonyms": [
+                  "mouse sports"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Virtus.pro",
+                "synonyms": [
+                  "virtus",
+                  "virtus pro"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Ninjas In Pyjamas",
+                "synonyms": [
+                  "n. i. p.",
+                  "Nip"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Liquid",
+                "synonyms": [
+                  "team liquid"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
