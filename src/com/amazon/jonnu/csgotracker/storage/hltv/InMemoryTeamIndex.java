@@ -5,11 +5,11 @@ import java.util.Optional;
 
 import com.google.common.collect.ImmutableMap;
 
-public class TeamImpl implements Team {
+public class InMemoryTeamIndex implements TeamIndex {
 
     //final BKTreeMap<String, Integer> teamMap = new BKTreeMapImpl<>();
 
-    final Map<String, Integer> teamMap = ImmutableMap.<String, Integer>builder()
+    private final Map<String, Integer> teamMap = ImmutableMap.<String, Integer>builder()
             .put("astralis", 6665)
             .put("liquid", 5973)
             .put("natus vincere", 4608)

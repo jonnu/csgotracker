@@ -9,4 +9,5 @@ import lombok.Value;
 public class Player {
     @NonNull public final String spokenIdentifier;
     @NonNull public final String displayIdentifier;
+    private final String country;
 }

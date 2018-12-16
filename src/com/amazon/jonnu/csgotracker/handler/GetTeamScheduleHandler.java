@@ -10,6 +10,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.TimeZone;
 
+import com.amazon.jonnu.csgotracker.service.IntentRequest;
+import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 import com.google.inject.Inject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -20,26 +22,26 @@ import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
 import com.amazon.jonnu.csgotracker.model.TeamScheduleResult;
-import com.amazon.jonnu.csgotracker.service.CrappyScheduleInterface;
 import com.amazon.jonnu.csgotracker.service.EntityResolver;
 import com.amazon.jonnu.csgotracker.service.alexa.AlexaSettings;
 import com.amazon.jonnu.csgotracker.service.alexa.model.SettingsRequest;
-import com.amazon.jonnu.csgotracker.storage.hltv.Team;
+import com.amazon.jonnu.csgotracker.storage.hltv.TeamIndex;
 
 @Slf4j
 public class GetTeamScheduleHandler implements RequestHandler {
 
+    private static final String SLOT_TIME_INDICATOR = "TimeIndicator";
     private static final String SLOT_TEAM_IDENTIFIER = "TeamIdentifier";
-
-    private final EntityResolver resolver;
-    private final CrappyScheduleInterface storage;
-    private final AlexaSettings alexaSettings;
-    private final Team team;
 
     private static final PrettyTime prettyTime = new PrettyTime();
 
+    private final EntityResolver resolver;
+    private final TeamDataRetriever storage;
+    private final AlexaSettings alexaSettings;
+    private final TeamIndex team;
+
     @Inject
-    public GetTeamScheduleHandler(@NonNull final EntityResolver resolver, @NonNull final CrappyScheduleInterface storage, @NonNull final AlexaSettings alexaSettings, @NonNull final Team team) {
+    public GetTeamScheduleHandler(@NonNull final EntityResolver resolver, @NonNull final TeamDataRetriever storage, @NonNull final AlexaSettings alexaSettings, @NonNull final TeamIndex team) {
         this.team = team;
         this.resolver = resolver;
         this.storage = storage;
@@ -53,6 +55,11 @@ public class GetTeamScheduleHandler implements RequestHandler {
 
     @Override
     public Optional<Response> handle(final HandlerInput input) {
+
+        IntentRequest intentRequest = IntentRequest.buildFromInput(input);
+
+
+
 
         TimeZone timeZone = alexaSettings.getTimeZone(SettingsRequest.builder()
                 .apiToken(input.getRequestEnvelope().getContext().getSystem().getApiAccessToken())
@@ -86,7 +93,6 @@ public class GetTeamScheduleHandler implements RequestHandler {
         if (upcoming.isEmpty()) {
             return input.getResponseBuilder()
                     .withSpeech("No upcoming matches found.")
-                    .withShouldEndSession(true)
                     .build();
         }
 
@@ -96,7 +102,7 @@ public class GetTeamScheduleHandler implements RequestHandler {
                 result.getQueriedTeam().getSpokenIdentifier(),
                 result.getOpponentTeam().getSpokenIdentifier(),
                 getPrettyTime(result.getDateTime(), timeZone),
-                result.getMap().get(0).getSpokenIdentifier()
+                result.getMapList().getMaps().get(0).getSpokenIdentifier()
         );
 
         return input.getResponseBuilder()

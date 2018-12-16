@@ -3,6 +3,9 @@ package com.amazon.jonnu.csgotracker.injection;
 import java.util.ArrayList;
 import java.util.Set;
 
+import com.amazon.jonnu.csgotracker.service.*;
+import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
+import com.amazon.jonnu.csgotracker.storage.hltv.HLTVTeamDataRetriever;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.multibindings.Multibinder;
@@ -17,10 +20,6 @@ import com.amazon.jonnu.csgotracker.handler.HelpIntentHandler;
 import com.amazon.jonnu.csgotracker.handler.LaunchRequestHandler;
 import com.amazon.jonnu.csgotracker.handler.SessionEndedRequestHandler;
 import com.amazon.jonnu.csgotracker.injection.module.HLTVModule;
-import com.amazon.jonnu.csgotracker.service.CrappyScheduleInterface;
-import com.amazon.jonnu.csgotracker.service.EntityResolver;
-import com.amazon.jonnu.csgotracker.service.EntityResolverImpl;
-import com.amazon.jonnu.csgotracker.service.HLTV;
 import com.amazon.jonnu.csgotracker.service.alexa.AlexaSettings;
 import com.amazon.jonnu.csgotracker.service.alexa.AlexaSettingsImpl;
 import com.amazon.jonnu.csgotracker.service.jsoup.ConnectionFactory;
@@ -49,9 +48,12 @@ public class CSGOTrackerModule extends AbstractModule {
         bind(EntityResolver.class).to(EntityResolverImpl.class);
         bind(ScheduleStorage.class).to(ScheduleStorageImpl.class);
         bind(ConnectionFactory.class).to(ConnectionFactoryImpl.class);
-        bind(CrappyScheduleInterface.class).to(HLTV.class);
+        bind(TeamDataRetriever.class).to(HLTVTeamDataRetriever.class);
 
         bind(AlexaSettings.class).to(AlexaSettingsImpl.class);
+
+        // Services
+        bind(TeamSchedule.class).to(TeamScheduleImpl.class);
 
         install(new HLTVModule());
     }

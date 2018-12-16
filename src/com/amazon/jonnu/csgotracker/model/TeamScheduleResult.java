@@ -13,5 +13,5 @@ public class TeamScheduleResult {
     private final Team opponentTeam;
     private final ZonedDateTime dateTime;
     // TODO: encapsulate as MapList model.
-    private final List<Map> map;
+    private final MapList mapList;
 }
