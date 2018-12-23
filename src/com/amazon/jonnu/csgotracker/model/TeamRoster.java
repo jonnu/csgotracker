@@ -5,5 +5,5 @@ import lombok.Value;
 
 @Value
 @Builder
-public class TeamRoster {
+public class TeamRoster implements Renderable {
 }
