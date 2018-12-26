@@ -4,14 +4,13 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.TimeZone;
 
-import com.amazon.jonnu.csgotracker.service.IntentRequest;
-import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 import com.google.inject.Inject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,10 @@ import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
 import com.amazon.jonnu.csgotracker.model.TeamScheduleResult;
 import com.amazon.jonnu.csgotracker.service.EntityResolver;
+import com.amazon.jonnu.csgotracker.service.IntentRequest;
 import com.amazon.jonnu.csgotracker.service.alexa.AlexaSettings;
 import com.amazon.jonnu.csgotracker.service.alexa.model.SettingsRequest;
+import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 import com.amazon.jonnu.csgotracker.storage.hltv.TeamIndex;
 
 @Slf4j
@@ -88,7 +89,8 @@ public class GetTeamScheduleHandler implements RequestHandler {
         }
 
         log.info("Calling storage for team with numerical identifier {}", hltvIdentifier.get());
-        List<TeamScheduleResult> upcoming = storage.getUpcomingMatches(hltvIdentifier.get());
+        List<TeamScheduleResult> upcoming = Collections.emptyList();
+        //storage.getUpcomingMatches(hltvIdentifier.get());
 
         if (upcoming.isEmpty()) {
             return input.getResponseBuilder()

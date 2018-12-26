@@ -2,10 +2,12 @@ package com.amazon.jonnu.csgotracker.storage.hltv.parser;
 
 import org.jsoup.nodes.Document;
 
-public class TeamScheduleParser implements HLTVParser<Void> {
+import com.amazon.jonnu.csgotracker.model.TeamSchedule;
+
+public class TeamScheduleParser implements HLTVDocumentParser<TeamSchedule> {
 
     @Override
-    public Void parse(Document document) {
+    public TeamSchedule parse(Document document) {
         return null;
     }
 }

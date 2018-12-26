@@ -1,13 +1,16 @@
 package com.amazon.jonnu.csgotracker.service;
 
-import com.amazon.jonnu.csgotracker.model.Team;
-import com.amazon.jonnu.csgotracker.model.TeamScheduleResult;
-import com.amazon.jonnu.csgotracker.service.jsoup.ConnectionFactoryImpl;
-import com.amazon.jonnu.csgotracker.storage.hltv.HLTVTeamDataRetriever;
+import java.util.Collections;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import com.amazon.jonnu.csgotracker.model.TeamRequest;
+import com.amazon.jonnu.csgotracker.model.TeamRoster;
+import com.amazon.jonnu.csgotracker.model.TeamSchedule;
+import com.amazon.jonnu.csgotracker.storage.hltv.HLTVDocumentParserFactoryImpl;
+import com.amazon.jonnu.csgotracker.storage.hltv.HLTVTeamDataRetriever;
+import com.amazon.jonnu.csgotracker.storage.hltv.InMemoryTeamIndex;
 
 class HLTVTeamDataRetrieverTest {
 
@@ -15,18 +18,18 @@ class HLTVTeamDataRetrieverTest {
 
     @BeforeEach
     void before() {
-        fixture = new HLTVTeamDataRetriever(new ConnectionFactoryImpl());
+        fixture = new HLTVTeamDataRetriever(new InMemoryTeamIndex(), new HLTVDocumentParserFactoryImpl(Collections.emptyMap()));
     }
 
     @Test
     void doTest() {
-        List<TeamScheduleResult> results = fixture.getUpcomingMatches(7801);
-        results.forEach(System.out::println);
+        TeamSchedule schedule = fixture.getTeamSchedule(TeamRequest.builder().build());
+        System.out.println(schedule);
     }
 
     @Test
     void getRoster() {
-        Team team = fixture.getRoster(7801).orElse(null);
-        team.getRoster().forEach(System.out::println);
+        TeamRoster roster = fixture.getTeamRoster(TeamRequest.builder().build());
+        System.out.println(roster);
     }
 }

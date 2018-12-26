@@ -1,11 +1,14 @@
 package com.amazon.jonnu.csgotracker.storage.hltv;
 
 import java.util.Map;
-import java.util.Optional;
 
 import com.google.common.collect.ImmutableMap;
+import lombok.NonNull;
 
-public class InMemoryTeamIndex implements TeamIndex {
+import com.amazon.jonnu.csgotracker.model.TeamRequest;
+import com.amazon.jonnu.csgotracker.storage.ResourceMapper;
+
+public class InMemoryTeamIndex implements ResourceMapper<Integer> {
 
     //final BKTreeMap<String, Integer> teamMap = new BKTreeMapImpl<>();
 
@@ -42,9 +45,15 @@ public class InMemoryTeamIndex implements TeamIndex {
             .put("gambit", 6651)
             .build();
 
-    public Optional<Integer> getIdentifier(final String identifier) {
-        return Optional.ofNullable(teamMap.get(identifier.toLowerCase()));
+    /**
+     * Obtain a service-specific identifier for the given team.
+     *
+     * @param request A team request.
+     * @return A team identifier.
+     */
+    @Override
+    public Integer getResource(@NonNull final TeamRequest request) {
+        return teamMap.get(request.getTeamName().toLowerCase());
     }
 
-    //private ToIntBiFunction<String, Integer> lev()
 }

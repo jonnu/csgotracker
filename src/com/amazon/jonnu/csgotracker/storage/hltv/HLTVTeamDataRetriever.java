@@ -1,32 +1,39 @@
 package com.amazon.jonnu.csgotracker.storage.hltv;
 
-import com.amazon.jonnu.csgotracker.model.*;
-import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
-import com.amazon.jonnu.csgotracker.storage.TeamIdMapper;
+import javax.annotation.Nullable;
+
 import com.google.inject.Inject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.amazon.jonnu.csgotracker.service.jsoup.ConnectionFactory;
-
-import javax.annotation.Nullable;
+import com.amazon.jonnu.csgotracker.model.TeamNews;
+import com.amazon.jonnu.csgotracker.model.TeamRequest;
+import com.amazon.jonnu.csgotracker.model.TeamResults;
+import com.amazon.jonnu.csgotracker.model.TeamRoster;
+import com.amazon.jonnu.csgotracker.model.TeamSchedule;
+import com.amazon.jonnu.csgotracker.storage.ResourceMapper;
+import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 
 @Slf4j
 public class HLTVTeamDataRetriever implements TeamDataRetriever {
 
-    private final TeamIdMapper idMapper;
+    private final ResourceMapper<Integer> idMapper;
+    private final HLTVDataDelegate delegate;
+    //private final HLTVDocumentParserFactory documentParserFactory;
 
 //    private final TeamIndex teamIndex;
-//    private final ConnectionFactory connectionFactory;
+//    private final DocumentFactory connectionFactory;
 //    @Inject
-//    public HLTVTeamDataRetriever(@NonNull final TeamIndex teamIndex, @NonNull final ConnectionFactory connectionFactory) {
+//    public HLTVTeamDataRetriever(@NonNull final TeamIndex teamIndex, @NonNull final DocumentFactory connectionFactory) {
 //        this.teamIndex = teamIndex;
 //        this.connectionFactory = connectionFactory;
 //    }
 
     @Inject
-    public HLTVTeamDataRetriever(@NonNull final TeamIdMapper idMapper) {
+    public HLTVTeamDataRetriever(@NonNull final ResourceMapper<Integer> idMapper, @NonNull final HLTVDataDelegate delegate) {
         this.idMapper = idMapper;
+        this.delegate = delegate;
+//        this.documentParserFactory = documentParserFactory;
     }
 
     @Nullable
@@ -38,7 +45,37 @@ public class HLTVTeamDataRetriever implements TeamDataRetriever {
     @Nullable
     @Override
     public TeamRoster getTeamRoster(@NonNull final TeamRequest request) {
-        return null;
+
+        log.info("TeamRoster request with {}", request);
+        int n = idMapper.getResource(request);
+
+        //ResourceType.ROSTER
+        HLTVResource resource = null;//___.getResource(request);
+
+        /*
+        final String resourceURL = String.format("https://www.hltv.org/team/%d/%s", n,
+                request.getTeamName().toLowerCase().replace(" ", "-")
+        );
+        */
+
+        return delegate.getRenderableModel(TeamRoster.class, resource);
+
+        /*return documentParserFactory.getParser(TeamRoster.class).parse(document)
+                .getParser(TeamRoster.class)
+                .withUrlResource(resourceUrl)
+                .parse();
+                */
+
+//        documentParserFactory.getParser(TeamRoster.class)
+//        HLTVDocumentParser<Team> parser = new TeamRosterParser();
+
+        //TeamRoster roster = getDocAndParse(resource, parser);
+        //final Document document = connectionFactory.getConnection("https://www.hltv.org/team/6665/astralis")
+        //                    .get();
+        //
+        //            HLTVDocumentParser<Team> parser = new TeamRosterParser();
+        //            return Optional.of(parser.parse(document));
+
     }
 
     @Nullable
@@ -55,7 +92,7 @@ public class HLTVTeamDataRetriever implements TeamDataRetriever {
 
 
 //    public Optional<Integer> getTeamIdentifier(final String teamName) {
-//        return teamIndex.getIdentifier(teamName);
+//        return teamIndex.getResource(teamName);
 //    }
 //
 //    public List<TeamScheduleResult> getUpcomingMatches(final int teamIdentifier) {
@@ -116,7 +153,7 @@ public class HLTVTeamDataRetriever implements TeamDataRetriever {
 //            final Document document = connectionFactory.getConnection("https://www.hltv.org/team/6665/astralis")
 //                    .get();
 //
-//            HLTVParser<Team> parser = new TeamRosterParser();
+//            HLTVDocumentParser<Team> parser = new TeamRosterParser();
 //            return Optional.of(parser.parse(document));
 //
 //        } catch (IOException exception) {

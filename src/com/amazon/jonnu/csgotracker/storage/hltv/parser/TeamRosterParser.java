@@ -1,28 +1,47 @@
 package com.amazon.jonnu.csgotracker.storage.hltv.parser;
 
-import com.amazon.jonnu.csgotracker.model.Player;
-import com.amazon.jonnu.csgotracker.model.Team;
-import org.jsoup.nodes.Document;
-
 import java.util.stream.Collectors;
 
-public class TeamRosterParser implements HLTVParser<Team> {
+import com.google.common.collect.ImmutableSet;
+import org.jsoup.nodes.Document;
+
+import com.amazon.jonnu.csgotracker.model.Individual;
+import com.amazon.jonnu.csgotracker.model.RosteredIndividual;
+import com.amazon.jonnu.csgotracker.model.RosteredRole;
+import com.amazon.jonnu.csgotracker.model.TeamRoster;
+
+public class TeamRosterParser implements HLTVDocumentParser<TeamRoster> {
 
     @Override
-    public Team parse(final Document document) {
+    public TeamRoster parse(final Document document) {
 
         final String teamName = document.select(".profile-team-container .profile-team-name").text();
 
-        return Team.builder()
-                .spokenIdentifier(teamName)
-                .displayIdentifier(teamName)
-                .roster(document.select(".bodyshot-team > a").stream()
-                        .map(element -> Player.builder()
-                                .spokenIdentifier(element.attr("title"))
-                                .displayIdentifier(element.attr("title"))
+        return TeamRoster.builder()
+                .teamName(teamName)
+                //.spokenIdentifier(teamName)
+                //.displayIdentifier(teamName)
+                .individuals(document.select(".bodyshot-team > a").stream()
+                        .map(element -> Individual.builder()
+                                .alias(element.attr("title"))
                                 .country(element.selectFirst(".playerFlagName img").attr("title"))
                                 .build())
-                        .collect(Collectors.toList()))
+                        .collect(Collectors.toList())
+                        .stream()
+                        .map(individual -> RosteredIndividual.builder()
+                                .active(true)
+                                .individual(individual)
+                                .roles(ImmutableSet.of(RosteredRole.PLAYER))
+                                .build())
+                        .collect(Collectors.toList())
+                )
+//                .roster(document.select(".bodyshot-team > a").stream()
+//                        .map(element -> Player.builder()
+//                                .spokenIdentifier(element.attr("title"))
+//                                .displayIdentifier(element.attr("title"))
+//                                .country(element.selectFirst(".playerFlagName img").attr("title"))
+//                                .build())
+//                        .collect(Collectors.toList()))
                 .build();
     }
 }
