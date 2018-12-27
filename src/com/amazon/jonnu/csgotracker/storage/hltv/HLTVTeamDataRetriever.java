@@ -11,6 +11,8 @@ import com.amazon.jonnu.csgotracker.model.TeamRequest;
 import com.amazon.jonnu.csgotracker.model.TeamResults;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
 import com.amazon.jonnu.csgotracker.model.TeamSchedule;
+import com.amazon.jonnu.csgotracker.storage.ResourceRequest;
+import com.amazon.jonnu.csgotracker.storage.ResourceType;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 
 @Slf4j

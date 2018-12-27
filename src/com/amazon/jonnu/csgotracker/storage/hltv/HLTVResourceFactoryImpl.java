@@ -20,6 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.amazon.jonnu.csgotracker.storage.ResourceRequest;
+import com.amazon.jonnu.csgotracker.storage.ResourceType;
 import com.amazon.jonnu.csgotracker.storage.hltv.team.TeamIdentifierStorage;
 
 @Slf4j
@@ -30,10 +32,12 @@ public class HLTVResourceFactoryImpl implements HLTVResourceFactory {
     private static final String SCHEME = "https";
     private static final String DOMAIN = "www.hltv.org";
 
+    private static final Map<String, String> PARAM_TEAM_IDENTIFIER = ImmutableMap.of("team", "${identifier}");;
+
     private static final Map<ResourceType, URIBuilder> BUILDERS = ImmutableMap.<ResourceType, URIBuilder>builder()
             .put(ResourceType.ROSTER, buildURI("/team/${identifier}/${teamname}"))
-            .put(ResourceType.SCHEDULE, buildURI("/matches", singleEntryMap("team", "${identifier}")))
-            .put(ResourceType.RESULTS, buildURI("/results", singleEntryMap("team", "${identifier}")))
+            .put(ResourceType.SCHEDULE, buildURI("/matches", PARAM_TEAM_IDENTIFIER))
+            .put(ResourceType.RESULTS, buildURI("/results", PARAM_TEAM_IDENTIFIER))
             .put(ResourceType.RANKING, buildURI("/ranking/teams"))
             .build();
 
@@ -45,7 +49,7 @@ public class HLTVResourceFactoryImpl implements HLTVResourceFactory {
     public HLTVResource getResource(final ResourceRequest request) {
 
         Integer hltvIdentifier = Optional.ofNullable(identifierStorage.getIdentifier(request.getIdentifier()))
-                .orElseThrow(() -> new RuntimeException("Unable."));
+                .orElseThrow(() -> new HLTVResourceException("Unable to resolve HLTV identifier from request."));
 
         Map<String, String> replacements = ImmutableMap.<String, String>builder()
                 .put("identifier", hltvIdentifier.toString())
@@ -55,17 +59,10 @@ public class HLTVResourceFactoryImpl implements HLTVResourceFactory {
 
         log.info("Using replacement map: {}", replacements);
 
-        URL resourceURL = Optional.ofNullable(getURL(request.getType(), replacements))
-                .orElseThrow(() -> new RuntimeException("Unable."));
+        URL resourceURL = getURL(request.getType(), replacements);
 
         return HLTVResource.builder()
                 .url(resourceURL)
-                .build();
-    }
-
-    private static Map<String, String> singleEntryMap(final String key, final String value) {
-        return ImmutableMap.<String, String>builder()
-                .put(key, value)
                 .build();
     }
 
@@ -87,9 +84,17 @@ public class HLTVResourceFactoryImpl implements HLTVResourceFactory {
         return builder;
     }
 
+    private static URIBuilder getBuilder(final ResourceType type) {
+        try {
+            return new URIBuilder(BUILDERS.get(type).toString());
+        } catch (URISyntaxException exception) {
+            throw new HLTVResourceException("Unable to clone builder. Resource type: " + type.toString(), exception);
+        }
+    }
+
     private static URL getURL(final ResourceType type, final Map<String, String> replacements) {
 
-        URIBuilder builder = BUILDERS.get(type);
+        URIBuilder builder = getBuilder(type);
 
         if (!StringUtils.isBlank(builder.getPath())) {
             builder.setPath(performStringReplacements(builder.getPath(), replacements));
@@ -106,9 +111,8 @@ public class HLTVResourceFactoryImpl implements HLTVResourceFactory {
         }
         catch (URISyntaxException | MalformedURLException exception) {
             log.error("Unable to build URL", exception);
+            throw new HLTVResourceException("Failed to generate a HLTV resource", exception);
         }
-
-        return null;
     }
 
     private static String performStringReplacements(final String string, final Map<String, String> replacements) {

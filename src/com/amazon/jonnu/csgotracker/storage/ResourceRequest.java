@@ -1,4 +1,4 @@
-package com.amazon.jonnu.csgotracker.storage.hltv;
+package com.amazon.jonnu.csgotracker.storage;
 
 import lombok.Builder;
 import lombok.Value;

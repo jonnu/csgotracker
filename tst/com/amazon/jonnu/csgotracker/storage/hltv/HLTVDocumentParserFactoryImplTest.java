@@ -8,7 +8,7 @@ import com.google.inject.Guice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.amazon.jonnu.csgotracker.injection.module.HLTVModule;
+import com.amazon.jonnu.csgotracker.injection.CSGOTrackerModule;
 import com.amazon.jonnu.csgotracker.model.Renderable;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
 import com.amazon.jonnu.csgotracker.storage.hltv.parser.HLTVDocumentParser;
@@ -19,7 +19,7 @@ class HLTVDocumentParserFactoryImplTest {
 
     @BeforeEach
     void before() {
-        fixture = Guice.createInjector(new HLTVModule())
+        fixture = Guice.createInjector(new CSGOTrackerModule())
                 .getInstance(HLTVDocumentParserFactory.class);
     }
 

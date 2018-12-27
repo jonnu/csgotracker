@@ -3,12 +3,12 @@ package com.amazon.jonnu.csgotracker.storage.hltv.team;
 import java.util.Map;
 import javax.annotation.Nullable;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableBiMap;
 import lombok.NonNull;
 
 public class InMemoryTeamIndex implements TeamIdentifierStorage<Integer> {
 
-    private final Map<String, Integer> teamMap = ImmutableMap.<String, Integer>builder()
+    private final Map<String, Integer> teamMap = ImmutableBiMap.<String, Integer>builder()
             .put("astralis", 6665)
             .put("liquid", 5973)
             .put("natus vincere", 4608)

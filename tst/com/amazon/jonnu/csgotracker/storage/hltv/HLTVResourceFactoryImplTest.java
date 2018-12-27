@@ -3,7 +3,7 @@ package com.amazon.jonnu.csgotracker.storage.hltv;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.amazon.jonnu.csgotracker.storage.ResourceRequest;
+import com.amazon.jonnu.csgotracker.storage.ResourceType;
 import com.amazon.jonnu.csgotracker.storage.hltv.team.TeamIdentifierStorage;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +34,7 @@ class HLTVResourceFactoryImplTest {
 
     @Test
     void getResourceSuccessfully() {
+
         when(mockIdentifierStorage.getIdentifier(TEAM_NAME)).thenReturn(TEAM_IDENTIFIER);
 
         ResourceRequest request = ResourceRequest.builder()
@@ -48,12 +51,13 @@ class HLTVResourceFactoryImplTest {
     @Test
     void getResourceWithUnresolvableTeam() {
 
+        when(mockIdentifierStorage.getIdentifier("CannotResolve")).thenReturn(null);
+
         ResourceRequest request = ResourceRequest.builder()
                 .type(ResourceType.ROSTER)
                 .identifier("CannotResolve")
                 .build();
 
-        when(mockIdentifierStorage.getIdentifier(eq("CannotResolve"))).thenReturn(null);
-        fixture.getResource(request);
+        assertThrows(HLTVResourceException.class, () -> fixture.getResource(request));
     }
 }

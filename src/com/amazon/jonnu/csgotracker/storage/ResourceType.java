@@ -1,4 +1,4 @@
-package com.amazon.jonnu.csgotracker.storage.hltv;
+package com.amazon.jonnu.csgotracker.storage;
 
 public enum ResourceType {
     ROSTER,

@@ -1,5 +1,7 @@
 package com.amazon.jonnu.csgotracker.service;
 
+import java.util.Locale;
+
 import com.google.inject.Guice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,19 +20,24 @@ class HLTVTeamDataRetrieverTest {
     void before() {
         fixture = Guice.createInjector(new CSGOTrackerModule())
                 .getInstance(HLTVTeamDataRetriever.class);
-//        fixture = new HLTVTeamDataRetriever(
-//                new HLTVDataDelegateImpl()new InMemoryTeamIndex(), new HLTVDocumentParserFactoryImpl(Collections.emptyMap()));
     }
 
     @Test
     void doTest() {
-        TeamSchedule schedule = fixture.getTeamSchedule(TeamRequest.builder().build());
+        TeamSchedule schedule = fixture.getTeamSchedule(createTeamRequest("Astralis"));
         System.out.println(schedule);
     }
 
     @Test
     void getRoster() {
-        TeamRoster roster = fixture.getTeamRoster(TeamRequest.builder().build());
+        TeamRoster roster = fixture.getTeamRoster(createTeamRequest("Astralis"));
         System.out.println(roster);
+    }
+
+    private TeamRequest createTeamRequest(final String teamName) {
+        return TeamRequest.builder()
+                .teamName(teamName)
+                .locale(Locale.US)
+                .build();
     }
 }

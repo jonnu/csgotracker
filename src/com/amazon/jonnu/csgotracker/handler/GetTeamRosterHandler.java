@@ -21,13 +21,13 @@ import com.amazon.jonnu.csgotracker.view.Renderer;
 
 public class GetTeamRosterHandler implements RequestHandler {
 
-    private final TeamDataRetriever dataRetriever;
-    private final Renderer<Renderable> dataRenderer;
+    private final TeamDataRetriever retriever;
+    private final Renderer<Renderable> renderer;
 
     @Inject
-    public GetTeamRosterHandler(@NonNull final TeamDataRetriever dataRetriever, @NonNull final Renderer<Renderable> dataRenderer) {
-        this.dataRetriever = dataRetriever;
-        this.dataRenderer = dataRenderer;
+    public GetTeamRosterHandler(@NonNull final TeamDataRetriever retriever, @NonNull final Renderer<Renderable> renderer) {
+        this.retriever = retriever;
+        this.renderer = renderer;
     }
 
     @Override
@@ -38,11 +38,12 @@ public class GetTeamRosterHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(final HandlerInput input) {
 
+        // @TODO try/catch the handle into a generic error handler.
         TeamRequest request = create((IntentRequest) input.getRequestEnvelope().getRequest());
 
-        TeamRoster roster = dataRetriever.getTeamRoster(request);
+        TeamRoster roster = retriever.getTeamRoster(request);
 
-        return dataRenderer.render(roster);
+        return renderer.render(roster);
     }
 
     private TeamRequest create(final IntentRequest request) {

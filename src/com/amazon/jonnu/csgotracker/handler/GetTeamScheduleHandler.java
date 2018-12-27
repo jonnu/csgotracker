@@ -26,7 +26,7 @@ import com.amazon.jonnu.csgotracker.service.IntentRequest;
 import com.amazon.jonnu.csgotracker.service.alexa.AlexaSettings;
 import com.amazon.jonnu.csgotracker.service.alexa.model.SettingsRequest;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
-import com.amazon.jonnu.csgotracker.storage.hltv.TeamIndex;
+import com.amazon.jonnu.csgotracker.storage.hltv.team.TeamIdentifierStorage;
 
 @Slf4j
 public class GetTeamScheduleHandler implements RequestHandler {
@@ -39,14 +39,14 @@ public class GetTeamScheduleHandler implements RequestHandler {
     private final EntityResolver resolver;
     private final TeamDataRetriever storage;
     private final AlexaSettings alexaSettings;
-    private final TeamIndex team;
+    private final TeamIdentifierStorage<Integer> identifierStorage;
 
     @Inject
-    public GetTeamScheduleHandler(@NonNull final EntityResolver resolver, @NonNull final TeamDataRetriever storage, @NonNull final AlexaSettings alexaSettings, @NonNull final TeamIndex team) {
-        this.team = team;
+    public GetTeamScheduleHandler(@NonNull final EntityResolver resolver, @NonNull final TeamDataRetriever storage, @NonNull final AlexaSettings alexaSettings, @NonNull final TeamIdentifierStorage<Integer> identifierStorage) {
         this.resolver = resolver;
         this.storage = storage;
         this.alexaSettings = alexaSettings;
+        this.identifierStorage = identifierStorage;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class GetTeamScheduleHandler implements RequestHandler {
         log.info("Resolved team as {}", teamIdentifier.get());
 
         // Map team to hltv ID.
-        Optional<Integer> hltvIdentifier = team.getIdentifier(teamIdentifier.get().getValue());
+        Optional<Integer> hltvIdentifier = Optional.ofNullable(identifierStorage.getIdentifier(teamIdentifier.get().getValue()));
         if (!hltvIdentifier.isPresent()) {
             log.error("Could not resolve {} to an identifier.", teamIdentifier.get().getValue());
             return input.getResponseBuilder()

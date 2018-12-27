@@ -29,8 +29,6 @@ import com.amazon.jonnu.csgotracker.service.jsoup.DocumentFactory;
 import com.amazon.jonnu.csgotracker.service.jsoup.DocumentFactoryImpl;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 import com.amazon.jonnu.csgotracker.storage.hltv.HLTVTeamDataRetriever;
-import com.amazon.jonnu.csgotracker.storage.schedule.ScheduleStorage;
-import com.amazon.jonnu.csgotracker.storage.schedule.ScheduleStorageImpl;
 
 public class CSGOTrackerModule extends AbstractModule {
 
@@ -51,7 +49,6 @@ public class CSGOTrackerModule extends AbstractModule {
         requestHandlerBinder.addBinding().to(SessionEndedRequestHandler.class);
 
         bind(EntityResolver.class).to(EntityResolverImpl.class);
-        bind(ScheduleStorage.class).to(ScheduleStorageImpl.class);
         bind(DocumentFactory.class).to(DocumentFactoryImpl.class);
         bind(TeamDataRetriever.class).to(HLTVTeamDataRetriever.class);
 
