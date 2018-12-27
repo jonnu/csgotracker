@@ -7,5 +7,5 @@ import com.amazon.jonnu.csgotracker.storage.hltv.parser.HLTVDocumentParser;
 
 @FunctionalInterface
 public interface HLTVDocumentParserFactory {
-    @Nullable <T extends Renderable> HLTVDocumentParser<T> getParser(Class<T> clazz);
+    @Nullable <T extends Renderable> HLTVDocumentParser<T> getParser(Class<T> modelClass);
 }

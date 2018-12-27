@@ -21,7 +21,7 @@ public class HLTVDocumentParserFactoryImpl implements HLTVDocumentParserFactory 
     @Override
     @Nullable
     @SuppressWarnings("unchecked")
-    public <T extends Renderable> HLTVDocumentParser<T> getParser(@NonNull final Class<T> clazz) {
-        return (HLTVDocumentParser<T>) parsers.get(clazz);
+    public <T extends Renderable> HLTVDocumentParser<T> getParser(@NonNull final Class<T> modelClass) {
+        return (HLTVDocumentParser<T>) parsers.get(modelClass);
     }
 }

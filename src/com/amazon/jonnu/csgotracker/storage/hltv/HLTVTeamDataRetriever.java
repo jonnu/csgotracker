@@ -11,14 +11,14 @@ import com.amazon.jonnu.csgotracker.model.TeamRequest;
 import com.amazon.jonnu.csgotracker.model.TeamResults;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
 import com.amazon.jonnu.csgotracker.model.TeamSchedule;
-import com.amazon.jonnu.csgotracker.storage.ResourceMapper;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 
 @Slf4j
 public class HLTVTeamDataRetriever implements TeamDataRetriever {
 
-    private final ResourceMapper<Integer> idMapper;
+    //private final ResourceMapper<Integer> idMapper;
     private final HLTVDataDelegate delegate;
+    private final HLTVResourceFactoryImpl factory;
     //private final HLTVDocumentParserFactory documentParserFactory;
 
 //    private final TeamIndex teamIndex;
@@ -30,10 +30,9 @@ public class HLTVTeamDataRetriever implements TeamDataRetriever {
 //    }
 
     @Inject
-    public HLTVTeamDataRetriever(@NonNull final ResourceMapper<Integer> idMapper, @NonNull final HLTVDataDelegate delegate) {
-        this.idMapper = idMapper;
+    public HLTVTeamDataRetriever(@NonNull final HLTVDataDelegate delegate, @NonNull final HLTVResourceFactoryImpl factory) {
+        this.factory = factory;
         this.delegate = delegate;
-//        this.documentParserFactory = documentParserFactory;
     }
 
     @Nullable
@@ -47,35 +46,16 @@ public class HLTVTeamDataRetriever implements TeamDataRetriever {
     public TeamRoster getTeamRoster(@NonNull final TeamRequest request) {
 
         log.info("TeamRoster request with {}", request);
-        int n = idMapper.getResource(request);
 
-        //ResourceType.ROSTER
-        HLTVResource resource = null;//___.getResource(request);
+        final ResourceRequest resourceRequest = ResourceRequest.builder()
+                .identifier(request.getTeamName())
+                .type(ResourceType.ROSTER)
+                .build();
 
-        /*
-        final String resourceURL = String.format("https://www.hltv.org/team/%d/%s", n,
-                request.getTeamName().toLowerCase().replace(" ", "-")
-        );
-        */
+        HLTVResource resource = factory.getResource(resourceRequest);
+        log.info("Translated request {} to resource {}", resourceRequest, resource);
 
         return delegate.getRenderableModel(TeamRoster.class, resource);
-
-        /*return documentParserFactory.getParser(TeamRoster.class).parse(document)
-                .getParser(TeamRoster.class)
-                .withUrlResource(resourceUrl)
-                .parse();
-                */
-
-//        documentParserFactory.getParser(TeamRoster.class)
-//        HLTVDocumentParser<Team> parser = new TeamRosterParser();
-
-        //TeamRoster roster = getDocAndParse(resource, parser);
-        //final Document document = connectionFactory.getConnection("https://www.hltv.org/team/6665/astralis")
-        //                    .get();
-        //
-        //            HLTVDocumentParser<Team> parser = new TeamRosterParser();
-        //            return Optional.of(parser.parse(document));
-
     }
 
     @Nullable
@@ -89,6 +69,22 @@ public class HLTVTeamDataRetriever implements TeamDataRetriever {
     public TeamResults getTeamResults(@NonNull final TeamRequest request) {
         return null;
     }
+
+        /*return documentParserFactory.getParser(TeamRoster.class).parse(document)
+                .getParser(TeamRoster.class)
+                .withUrlResource(resourceUrl)
+                .parse();
+                */
+
+    //        documentParserFactory.getParser(TeamRoster.class)
+    //        HLTVDocumentParser<Team> parser = new TeamRosterParser();
+
+    //TeamRoster roster = getDocAndParse(resource, parser);
+    //final Document document = connectionFactory.getConnection("https://www.hltv.org/team/6665/astralis")
+    //                    .get();
+    //
+    //            HLTVDocumentParser<Team> parser = new TeamRosterParser();
+    //            return Optional.of(parser.parse(document));
 
 
 //    public Optional<Integer> getTeamIdentifier(final String teamName) {

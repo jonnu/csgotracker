@@ -1,16 +1,12 @@
-package com.amazon.jonnu.csgotracker.storage.hltv;
+package com.amazon.jonnu.csgotracker.storage.hltv.team;
 
 import java.util.Map;
+import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.NonNull;
 
-import com.amazon.jonnu.csgotracker.model.TeamRequest;
-import com.amazon.jonnu.csgotracker.storage.ResourceMapper;
-
-public class InMemoryTeamIndex implements ResourceMapper<Integer> {
-
-    //final BKTreeMap<String, Integer> teamMap = new BKTreeMapImpl<>();
+public class InMemoryTeamIndex implements TeamIdentifierStorage<Integer> {
 
     private final Map<String, Integer> teamMap = ImmutableMap.<String, Integer>builder()
             .put("astralis", 6665)
@@ -45,15 +41,14 @@ public class InMemoryTeamIndex implements ResourceMapper<Integer> {
             .put("gambit", 6651)
             .build();
 
-    /**
-     * Obtain a service-specific identifier for the given team.
-     *
-     * @param request A team request.
-     * @return A team identifier.
-     */
     @Override
-    public Integer getResource(@NonNull final TeamRequest request) {
-        return teamMap.get(request.getTeamName().toLowerCase());
+    @Nullable
+    public Integer getIdentifier(@NonNull final String name) {
+        return teamMap.get(normalize(name));
     }
 
+    // this might need to move to somewhere else...
+    private static String normalize(final String name) {
+        return name.toLowerCase();
+    }
 }

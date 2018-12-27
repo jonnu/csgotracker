@@ -1,16 +1,14 @@
 package com.amazon.jonnu.csgotracker.service;
 
-import java.util.Collections;
-
+import com.google.inject.Guice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.amazon.jonnu.csgotracker.injection.CSGOTrackerModule;
 import com.amazon.jonnu.csgotracker.model.TeamRequest;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
 import com.amazon.jonnu.csgotracker.model.TeamSchedule;
-import com.amazon.jonnu.csgotracker.storage.hltv.HLTVDocumentParserFactoryImpl;
 import com.amazon.jonnu.csgotracker.storage.hltv.HLTVTeamDataRetriever;
-import com.amazon.jonnu.csgotracker.storage.hltv.InMemoryTeamIndex;
 
 class HLTVTeamDataRetrieverTest {
 
@@ -18,7 +16,10 @@ class HLTVTeamDataRetrieverTest {
 
     @BeforeEach
     void before() {
-        fixture = new HLTVTeamDataRetriever(new InMemoryTeamIndex(), new HLTVDocumentParserFactoryImpl(Collections.emptyMap()));
+        fixture = Guice.createInjector(new CSGOTrackerModule())
+                .getInstance(HLTVTeamDataRetriever.class);
+//        fixture = new HLTVTeamDataRetriever(
+//                new HLTVDataDelegateImpl()new InMemoryTeamIndex(), new HLTVDocumentParserFactoryImpl(Collections.emptyMap()));
     }
 
     @Test

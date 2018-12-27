@@ -6,7 +6,6 @@ import com.google.inject.multibindings.MapBinder;
 
 import com.amazon.jonnu.csgotracker.model.Renderable;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
-import com.amazon.jonnu.csgotracker.storage.ResourceMapper;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 import com.amazon.jonnu.csgotracker.storage.hltv.HLTVDataDelegate;
 import com.amazon.jonnu.csgotracker.storage.hltv.HLTVDataDelegateImpl;
@@ -15,9 +14,10 @@ import com.amazon.jonnu.csgotracker.storage.hltv.HLTVDocumentParserFactoryImpl;
 import com.amazon.jonnu.csgotracker.storage.hltv.HLTVDocumentRetriever;
 import com.amazon.jonnu.csgotracker.storage.hltv.HLTVDocumentRetrieverImpl;
 import com.amazon.jonnu.csgotracker.storage.hltv.HLTVTeamDataRetriever;
-import com.amazon.jonnu.csgotracker.storage.hltv.InMemoryTeamIndex;
 import com.amazon.jonnu.csgotracker.storage.hltv.parser.HLTVDocumentParser;
 import com.amazon.jonnu.csgotracker.storage.hltv.parser.TeamRosterParser;
+import com.amazon.jonnu.csgotracker.storage.hltv.team.InMemoryTeamIndex;
+import com.amazon.jonnu.csgotracker.storage.hltv.team.TeamIdentifierStorage;
 
 public class HLTVModule extends AbstractModule {
 
@@ -31,7 +31,7 @@ public class HLTVModule extends AbstractModule {
         bind(HLTVDocumentRetriever.class).to(HLTVDocumentRetrieverImpl.class);
         bind(HLTVDocumentParserFactory.class).to(HLTVDocumentParserFactoryImpl.class);
 
-        bind(new TypeLiteral<ResourceMapper<Integer>>() {}).to(InMemoryTeamIndex.class);
+        bind(new TypeLiteral<TeamIdentifierStorage<Integer>>() {}).to(InMemoryTeamIndex.class);
 
         // Parsers
         MapBinder<Class<? extends Renderable>, HLTVDocumentParser<? extends Renderable>> documentParsers = MapBinder.newMapBinder(
