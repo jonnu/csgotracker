@@ -52,6 +52,8 @@
             }
           ],
           "samples": [
+            "who do {TeamIdentifier} play next",
+            "are {TeamIdentifier} playing",
             "are {TeamIdentifier} playing on {TimeIndicator}",
             "are {TeamIdentifier} playing {TimeIndicator}",
             "who are {TeamIdentifier} playing {TimeIndicator}",
@@ -64,6 +66,32 @@
             "when does {TeamIdentifier} play",
             "when do {TeamIdentifier} play next"
           ]
+        },
+        {
+          "name": "TeamRosterIntent",
+          "slots": [
+            {
+              "name": "TeamIdentifier",
+              "type": "TeamIdentifier"
+            },
+            {
+              "name": "TeamIndividual",
+              "type": "AMAZON.Athlete"
+            }
+          ],
+          "samples": [
+            "who is playing for {TeamIdentifier}",
+            "what is the {TeamIdentifier} roster",
+            "give me the line up for {TeamIdentifier}",
+            "what is the {TeamIdentifier} line up",
+            "what is the line up for {TeamIdentifier}",
+            "does {TeamIndividual} play for {TeamIdentifier}",
+            "what is {TeamIdentifier} roster",
+            "what is the team for {TeamIdentifier}",
+            "who plays for {TeamIdentifier}",
+            "who is on the roster for {TeamIdentifier}",
+            "who does {TeamIndividual} play for"
+          ]
         }
       ],
       "types": [
@@ -72,48 +100,9 @@
           "values": [
             {
               "name": {
-                "value": "Natus Vincere",
+                "value": "Astralis",
                 "synonyms": [
-                  "navi"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "Astralis"
-              }
-            },
-            {
-              "name": {
-                "value": "fnatic",
-                "synonyms": [
-                  "fanatic"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "mousesports",
-                "synonyms": [
-                  "mouse sports"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "Virtus.pro",
-                "synonyms": [
-                  "virtus",
-                  "virtus pro"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "Ninjas In Pyjamas",
-                "synonyms": [
-                  "n. i. p.",
-                  "Nip"
+                  "astralis"
                 ]
               }
             },
@@ -121,7 +110,256 @@
               "name": {
                 "value": "Liquid",
                 "synonyms": [
+                  "liquid",
                   "team liquid"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Natus Vincere",
+                "synonyms": [
+                  "natus vincere",
+                  "navi"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "MIBR",
+                "synonyms": [
+                  "mibr",
+                  "made in brazil"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "FaZe Clan",
+                "synonyms": [
+                  "faze",
+                  "faze clan",
+                  "phase",
+                  "phase clan"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Mousesports",
+                "synonyms": [
+                  "mousesports",
+                  "mouse sports"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Ninjas In Pyjamas",
+                "synonyms": [
+                  "nip",
+                  "n .i. p."
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "NRG",
+                "synonyms": [
+                  "nrg",
+                  "n. r. g.",
+                  "energy",
+                  "nrg esports"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "BIG",
+                "synonyms": [
+                  "big",
+                  "b. i. g",
+                  "berlin international gaming"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "North",
+                "synonyms": [
+                  "north",
+                  "team north"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Fnatic",
+                "synonyms": [
+                  "fnatic",
+                  "fanatic"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "HellRaisers",
+                "synonyms": [
+                  "hellraisers",
+                  "hell raisers"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Renegades",
+                "synonyms": [
+                  "renegades"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "ENCE",
+                "synonyms": [
+                  "ence"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "OpTic",
+                "synonyms": [
+                  "optic"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "LDLC",
+                "synonyms": [
+                  "ldlc",
+                  "team ldlc",
+                  "l. d. l. c."
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "CompLexity",
+                "synonyms": [
+                  "complexity",
+                  "coL"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Ghost",
+                "synonyms": [
+                  "ghost"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Heroic",
+                "synonyms": [
+                  "heroic"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Avangar",
+                "synonyms": [
+                  "avangar"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Luminosity",
+                "synonyms": [
+                  "luminosity"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "G2",
+                "synonyms": [
+                  "g2",
+                  "g. two"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "TyLoo",
+                "synonyms": [
+                  "tyloo"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Space Soldiers",
+                "synonyms": [
+                  "space soldiers"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Vega Squadron",
+                "synonyms": [
+                  "vega squadron",
+                  "vega"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Cloud9",
+                "synonyms": [
+                  "cloud9",
+                  "cloud nine",
+                  "c. nine"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Vitality",
+                "synonyms": [
+                  "vitality"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Bravado",
+                "synonyms": [
+                  "bravado"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Virtus.pro",
+                "synonyms": [
+                  "virtus.pro",
+                  "virtus",
+                  "virtus pro"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Gambit",
+                "synonyms": [
+                  "gambit"
                 ]
               }
             }
