@@ -27,6 +27,7 @@ public class TeamRosterRenderer implements Renderer<TeamRoster> {
     @Inject
     public TeamRosterRenderer(@NonNull final I18nStringProviderFactory stringProviderFactory) {
         this.stringProviderFactory = stringProviderFactory;
+        this.stringProvider = stringProviderFactory.create(Locale.US);
     }
 
     @Override

@@ -30,7 +30,7 @@ class HLTVTeamDataRetrieverTest {
 
     @Test
     void getRoster() {
-        TeamRoster roster = fixture.getTeamRoster(createTeamRequest("Astralis"));
+        TeamRoster roster = fixture.getTeamRoster(createTeamRequest("astralis"));
         System.out.println(roster);
     }
 
