@@ -41,11 +41,13 @@ public class I18nStringProviderImpl implements I18nStringProvider {
             return null;
         }
 
-        if (StringUtils.countMatches(string, "{}") != parameters.length) {
-            throw new IllegalArgumentException("Mismatch.");
-        }
-
-        return String.format(StringUtils.replace(string, "{}", "%s"), parameters);
+        return StringUtils.strip(string, "\"");
+//
+//        if (StringUtils.countMatches(string, "{}") != parameters.length) {
+//            throw new IllegalArgumentException("Mismatch.");
+//        }
+//
+//        return String.format(StringUtils.replace(string, "{}", "%s"), parameters);
     }
 
     public String buildNaturalList(final String[] elements) {
