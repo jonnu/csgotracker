@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.google.inject.Inject;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.LocaleUtils;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
@@ -19,6 +20,7 @@ import com.amazon.jonnu.csgotracker.model.TeamRoster;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 import com.amazon.jonnu.csgotracker.view.Renderer;
 
+@Slf4j
 public class GetTeamRosterHandler implements RequestHandler {
 
     private final TeamDataRetriever retriever;
@@ -38,6 +40,7 @@ public class GetTeamRosterHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(final HandlerInput input) {
 
+        log.info("Handle");
         // @TODO try/catch the handle into a generic error handler.
         TeamRequest request = create((IntentRequest) input.getRequestEnvelope().getRequest());
 

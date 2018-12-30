@@ -23,12 +23,12 @@ class I18nStringProviderImplTest {
         assertThat(actual, notNullValue());
     }
 
-    @Test
-    void keyExistsLocaleUnknown() {
-        String actual = fixture.getString("roster.team", Locale.KOREA);
-        System.out.println(actual);
-        assertThat(actual, notNullValue());
-    }
+//    @Test
+//    void keyExistsLocaleUnknown() {
+//        String actual = fixture.getString("roster.team", Locale.KOREA);
+//        System.out.println(actual);
+//        assertThat(actual, notNullValue());
+//    }
 
     @Test
     void keyExistsWithParameters() {

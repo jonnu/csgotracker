@@ -57,6 +57,8 @@ public class GetTeamScheduleHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(final HandlerInput input) {
 
+        log.info("Handle");
+
         IntentRequest intentRequest = IntentRequest.buildFromInput(input);
 
 
