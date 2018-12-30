@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.multibindings.Multibinder;
 
@@ -13,11 +14,14 @@ import com.amazon.ask.Skills;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.jonnu.csgotracker.handler.CancelAndStopIntentHandler;
 import com.amazon.jonnu.csgotracker.handler.FallbackIntentHandler;
+import com.amazon.jonnu.csgotracker.handler.GetTeamRosterHandler;
 import com.amazon.jonnu.csgotracker.handler.GetTeamScheduleHandler;
 import com.amazon.jonnu.csgotracker.handler.HelpIntentHandler;
 import com.amazon.jonnu.csgotracker.handler.LaunchRequestHandler;
 import com.amazon.jonnu.csgotracker.handler.SessionEndedRequestHandler;
 import com.amazon.jonnu.csgotracker.injection.module.HLTVModule;
+import com.amazon.jonnu.csgotracker.model.TeamRoster;
+import com.amazon.jonnu.csgotracker.model.TeamSchedule;
 import com.amazon.jonnu.csgotracker.service.EntityResolver;
 import com.amazon.jonnu.csgotracker.service.EntityResolverImpl;
 import com.amazon.jonnu.csgotracker.service.I18nStringProvider;
@@ -29,6 +33,9 @@ import com.amazon.jonnu.csgotracker.service.jsoup.DocumentFactory;
 import com.amazon.jonnu.csgotracker.service.jsoup.DocumentFactoryImpl;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
 import com.amazon.jonnu.csgotracker.storage.hltv.HLTVTeamDataRetriever;
+import com.amazon.jonnu.csgotracker.view.Renderer;
+import com.amazon.jonnu.csgotracker.view.TeamRosterRenderer;
+import com.amazon.jonnu.csgotracker.view.TeamSchduleRenderer;
 
 public class CSGOTrackerModule extends AbstractModule {
 
@@ -42,6 +49,7 @@ public class CSGOTrackerModule extends AbstractModule {
         final Multibinder<RequestHandler> requestHandlerBinder = Multibinder.newSetBinder(binder(), RequestHandler.class);
 
         requestHandlerBinder.addBinding().to(GetTeamScheduleHandler.class);
+        requestHandlerBinder.addBinding().to(GetTeamRosterHandler.class);
         requestHandlerBinder.addBinding().to(CancelAndStopIntentHandler.class);
         requestHandlerBinder.addBinding().to(HelpIntentHandler.class);
         requestHandlerBinder.addBinding().to(LaunchRequestHandler.class);
@@ -56,6 +64,10 @@ public class CSGOTrackerModule extends AbstractModule {
 
         // Services
         //bind(TeamSchedule.class).to(TeamScheduleImpl.class);
+
+        // Renderers
+        bind(new TypeLiteral<Renderer<TeamRoster>>() {}).to(TeamRosterRenderer.class);
+        bind(new TypeLiteral<Renderer<TeamSchedule>>() {}).to(TeamSchduleRenderer.class);
 
         install(new FactoryModuleBuilder()
                 .implement(I18nStringProvider.class, I18nStringProviderImpl.class)

@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.ui.Card;
-import com.amazon.ask.model.ui.SimpleCard;
+import com.amazon.ask.model.ui.StandardCard;
 import com.amazon.ask.response.ResponseBuilder;
 import com.amazon.jonnu.csgotracker.model.RosteredRole;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
@@ -75,9 +75,21 @@ public class TeamRosterRenderer implements Renderer<TeamRoster> {
     }
 
     private Card renderCard(final TeamRoster data) {
-        return SimpleCard.builder()
-                .withTitle(data.toString())
-                .withContent(data.toString())
+
+        Map<String, TemplateVariable> replacements = ImmutableMap.<String, TemplateVariable>builder()
+                .put("team", SimpleTemplateVariable.builder().key("teamName").variable(data.getTeamName()).build())
+                //.put("individuals", IterableTemplateVariable.builder().key("individuals").variable(individuals).build())
+                .build();
+
+        String title = stringProvider.getString("roster.card.title", Locale.US, replacements);
+
+        return StandardCard.builder()
+                //.withImage(Image.builder()
+                //        .withLargeImageUrl()
+                //        .withSmallImageUrl()
+                //        .build())
+                .withTitle(title)
+                .withText("Roster TBC")
                 .build();
     }
 }

@@ -11,9 +11,11 @@
         </Lambda>
     </Appenders>
     <Loggers>
-        <Root level="info">
+        <Root level="warn">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="Lambda"/>
         </Root>
+        <Logger name="lambda" level="info">
+            <AppenderRef ref="Lambda"/>
+        </Logger>
     </Loggers>
 </Configuration>

@@ -49,7 +49,7 @@ public class HLTVResourceFactoryImpl implements HLTVResourceFactory {
     public HLTVResource getResource(final ResourceRequest request) {
 
         Integer hltvIdentifier = Optional.ofNullable(identifierStorage.getIdentifier(request.getIdentifier()))
-                .orElseThrow(() -> new HLTVResourceException("Unable to resolve HLTV identifier from request."));
+                .orElseThrow(() -> new HLTVResourceException("Unable to resolve HLTV identifier using '" + request.getIdentifier() + "'"));
 
         Map<String, String> replacements = ImmutableMap.<String, String>builder()
                 .put("identifier", hltvIdentifier.toString())

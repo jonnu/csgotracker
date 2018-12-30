@@ -14,7 +14,6 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
-import com.amazon.jonnu.csgotracker.model.Renderable;
 import com.amazon.jonnu.csgotracker.model.TeamRequest;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
@@ -24,10 +23,10 @@ import com.amazon.jonnu.csgotracker.view.Renderer;
 public class GetTeamRosterHandler implements RequestHandler {
 
     private final TeamDataRetriever retriever;
-    private final Renderer<Renderable> renderer;
+    private final Renderer<TeamRoster> renderer;
 
     @Inject
-    public GetTeamRosterHandler(@NonNull final TeamDataRetriever retriever, @NonNull final Renderer<Renderable> renderer) {
+    public GetTeamRosterHandler(@NonNull final TeamDataRetriever retriever, @NonNull final Renderer<TeamRoster> renderer) {
         this.retriever = retriever;
         this.renderer = renderer;
     }

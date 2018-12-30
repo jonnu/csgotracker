@@ -22,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.amazon.ask.model.Response;
 import com.amazon.ask.response.ResponseBuilder;
-import com.amazon.jonnu.csgotracker.model.Renderable;
 import com.amazon.jonnu.csgotracker.model.TeamRequest;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
@@ -35,7 +34,7 @@ class GetTeamRosterHandlerTest extends AbstractHandlerTest {
     private static final String INTENT_INVALID = "TeamScheduleIntent";
 
     @Mock private TeamDataRetriever mockDataRetriever;
-    @Mock private Renderer<Renderable> mockDataRenderer;
+    @Mock private Renderer<TeamRoster> mockDataRenderer;
     @Captor private ArgumentCaptor<TeamRequest> teamRequestCaptor;
 
     private GetTeamRosterHandler fixture;
