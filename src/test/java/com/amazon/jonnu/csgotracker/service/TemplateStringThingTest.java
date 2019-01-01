@@ -14,11 +14,14 @@ import org.junit.jupiter.api.Test;
 
 class TemplateStringThingTest {
 
-    private TemplateStringThing fixture;
+    private TemplateReplacer fixture;
 
     @BeforeEach
     void before() {
-        fixture = new TemplateStringThing();
+        fixture = new TemplateReplacerImpl(ImmutableMap.<Class, TemplateVariableReplacer>builder()
+                .put(String.class, new SimpleTemplateReplacer())
+                .put(Iterable.class, new IterableTemplateReplacer())
+                .build());
     }
 
     @Test

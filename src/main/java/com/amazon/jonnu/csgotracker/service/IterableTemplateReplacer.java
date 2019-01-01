@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 @Setter
-public class IterableTemplateReplacer implements TemplateReplacer<Iterable<String>> {
+public class IterableTemplateReplacer implements TemplateVariableReplacer<Iterable<String>> {
 
     private final String delimiter;
     private final String penultimator;

@@ -20,12 +20,14 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.response.ResponseBuilder;
+import com.amazon.jonnu.csgotracker.handler.csgo.GetTeamRosterHandler;
 import com.amazon.jonnu.csgotracker.model.TeamRequest;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
-import com.amazon.jonnu.csgotracker.view.Renderer;
+import com.amazon.jonnu.csgotracker.view.renderer.Renderer;
 
 @ExtendWith(MockitoExtension.class)
 class GetTeamRosterHandlerTest extends AbstractHandlerTest {
@@ -59,24 +61,26 @@ class GetTeamRosterHandlerTest extends AbstractHandlerTest {
     @Test
     void handleRequest() {
 
-        final String requestedTeamname = "Astralis";
+        final String requestedTeamName = "Astralis";
+        final HandlerInput handlerInput = getIntentRequestHandlerInput(INTENT_VALID, getTeamIdentifierSlotMap(requestedTeamName));
+
         final TeamRoster mockedTeamRoster = TeamRoster.builder()
-                .teamName(requestedTeamname)
+                .teamName(requestedTeamName)
                 .individuals(Collections.emptyList())
                 .build();
 
         when(mockDataRetriever.getTeamRoster(any(TeamRequest.class))).thenReturn(mockedTeamRoster);
-        when(mockDataRenderer.render(mockedTeamRoster)).thenReturn(new ResponseBuilder().withSpeech("Unit Test").build());
+        when(mockDataRenderer.render(handlerInput, mockedTeamRoster)).thenReturn(new ResponseBuilder().withSpeech("Unit Test").build());
 
-        Optional<Response> response = fixture.handle(getIntentRequestHandlerInput(INTENT_VALID, getTeamIdentifierSlotMap(requestedTeamname)));
+        Optional<Response> response = fixture.handle(handlerInput);
 
         assertThat("A response from the handler is expected.", response.isPresent(), is(true));
         assertThat(response.get().getOutputSpeech().toString(), containsString("Unit Test"));
 
         verify(mockDataRetriever).getTeamRoster(teamRequestCaptor.capture());
-        verify(mockDataRenderer).render(mockedTeamRoster);
+        verify(mockDataRenderer).render(handlerInput, mockedTeamRoster);
 
-        assertThat(teamRequestCaptor.getValue().getTeamName(), equalTo(requestedTeamname));
+        assertThat(teamRequestCaptor.getValue().getTeamName(), equalTo(requestedTeamName));
         assertThat(teamRequestCaptor.getValue().getLocale(), equalTo(Locale.US));
     }
 }

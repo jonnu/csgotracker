@@ -1,4 +1,4 @@
-package com.amazon.jonnu.csgotracker.handler;
+package com.amazon.jonnu.csgotracker.handler.csgo;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
@@ -17,7 +17,7 @@ import com.amazon.ask.model.Response;
 import com.amazon.jonnu.csgotracker.model.TeamRequest;
 import com.amazon.jonnu.csgotracker.model.TeamRoster;
 import com.amazon.jonnu.csgotracker.storage.TeamDataRetriever;
-import com.amazon.jonnu.csgotracker.view.Renderer;
+import com.amazon.jonnu.csgotracker.view.renderer.Renderer;
 
 @Slf4j
 public class GetTeamRosterHandler implements RequestHandler {
@@ -39,13 +39,12 @@ public class GetTeamRosterHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(final HandlerInput input) {
 
-        log.info("Handle");
-        // @TODO try/catch the handle into a generic error handler.
         TeamRequest request = create((IntentRequest) input.getRequestEnvelope().getRequest());
+        log.info("TeamRosterIntent handler: {}", request);
 
         TeamRoster roster = retriever.getTeamRoster(request);
 
-        return renderer.render(roster);
+        return renderer.render(input, roster);
     }
 
     private TeamRequest create(final IntentRequest request) {

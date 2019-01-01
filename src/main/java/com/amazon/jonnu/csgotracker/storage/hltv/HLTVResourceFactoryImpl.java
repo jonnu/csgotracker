@@ -127,6 +127,7 @@ public class HLTVResourceFactoryImpl implements HLTVResourceFactory {
         StringBuilder mutable = new StringBuilder(string);
 
         // @TODO - this shouldnt live here. extract it. [jonnu@]
+        // Replace this with templatestringthingy.
         @Value
         @RequiredArgsConstructor
         class ReplacementResult {

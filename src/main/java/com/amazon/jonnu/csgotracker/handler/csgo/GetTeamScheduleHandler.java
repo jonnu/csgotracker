@@ -1,4 +1,4 @@
-package com.amazon.jonnu.csgotracker.handler;
+package com.amazon.jonnu.csgotracker.handler.csgo;
 
 import static com.amazon.ask.request.Predicates.intentName;
 

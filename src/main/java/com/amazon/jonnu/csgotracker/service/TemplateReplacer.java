@@ -1,6 +1,9 @@
 package com.amazon.jonnu.csgotracker.service;
 
-@FunctionalInterface
-public interface TemplateReplacer<T> {
-    String replace(TemplateVariable<T> data);
+import java.util.Map;
+
+import lombok.NonNull;
+
+public interface TemplateReplacer {
+    String replace(@NonNull String template, @NonNull Map<String, TemplateVariable> replacements);
 }

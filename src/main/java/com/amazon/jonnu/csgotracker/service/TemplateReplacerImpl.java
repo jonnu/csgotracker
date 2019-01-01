@@ -5,39 +5,24 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
-// @TODO - rename this stupid class.
-public class TemplateStringThing {
+public class TemplateReplacerImpl implements TemplateReplacer {
 
     // @TODO - do we need the 'type' piece? seems YAGNI...
     private static final Pattern PATTERN = Pattern.compile("\\$\\{((?<type>[a-z]+):)?(?<key>[a-z]+)}");
-    private final Map<Class, TemplateReplacer> templateReplacers;
+    private final Map<Class, TemplateVariableReplacer> replacementStrategies;
 
     @Inject
-    public TemplateStringThing() {
-        templateReplacers = ImmutableMap.<Class, TemplateReplacer>builder()
-                .put(String.class, new SimpleTemplateReplacer())
-                .put(Iterable.class, new IterableTemplateReplacer(",", "and", true))
-                .build();
+    public TemplateReplacerImpl(@NonNull final Map<Class, TemplateVariableReplacer> replacementStrategies) {
+        this.replacementStrategies = replacementStrategies;
     }
 
-    /**
-     *
-     *
-     *
-     * ${variable} - replace with value inside map.
-     * ${list,variable} - replace with a csv list (with and) with value inside map.
-     *
-     * @param template
-     * @param replacements
-     * @return
-     */
+    @Override
     public String replace(@NonNull final String template, @NonNull final Map<String, TemplateVariable> replacements) {
 
         if (StringUtils.isBlank(template)) {
@@ -58,8 +43,13 @@ public class TemplateStringThing {
                 log.error("Replacement {} = empty", replacement.getKey());
             }
 
+            if (!replacementStrategies.containsKey(replacement.getType())) {
+                log.error("No replacement strategy for type: {}", replacement.getType().getSimpleName());
+                continue;
+            }
+
             @SuppressWarnings("unchecked")
-            String rep = templateReplacers.get(replacement.getType())
+            String rep = replacementStrategies.get(replacement.getType())
                     .replace(replacement);
 
             results.addFirst(TemplateReplacement.builder()
