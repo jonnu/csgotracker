@@ -14,7 +14,7 @@ public class HLTVDocumentParserFactoryImpl implements HLTVDocumentParserFactory 
     private final Map<Class<? extends Renderable>, HLTVDocumentParser<? extends Renderable>> parsers;
 
     @Inject
-    public HLTVDocumentParserFactoryImpl(final Map<Class<? extends Renderable>, HLTVDocumentParser<? extends Renderable>> parsers) {
+    public HLTVDocumentParserFactoryImpl(@NonNull final Map<Class<? extends Renderable>, HLTVDocumentParser<? extends Renderable>> parsers) {
         this.parsers = parsers;
     }
 
