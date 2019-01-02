@@ -1,3 +1,10 @@
-.idea
+# idea
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/libraries
+
 target
+/out/
+
 *.iml
+*.iws
