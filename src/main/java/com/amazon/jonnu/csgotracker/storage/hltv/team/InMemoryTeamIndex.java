@@ -39,6 +39,9 @@ public class InMemoryTeamIndex implements TeamIdentifierStorage<Integer> {
             .put("bravado", 5158)
             .put("virtus.pro", 5378)
             .put("gambit", 6651)
+
+            // extras
+            .put("endpoint", 7234)
             .build();
 
     @Override

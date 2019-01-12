@@ -14,6 +14,8 @@ import com.google.inject.Inject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import com.amazon.ask.model.services.ServiceException;
+import com.amazon.ask.model.services.ups.UpsService;
 import com.amazon.jonnu.csgotracker.service.alexa.model.SettingsRequest;
 
 @Slf4j
@@ -24,6 +26,17 @@ public class AlexaSettingsImpl implements AlexaSettings {
     @Inject
     public AlexaSettingsImpl() {
         //
+    }
+
+    public Optional<TimeZone> getTimeZone(@NonNull final UpsService service, @NonNull final String deviceId) {
+        try {
+            return Optional.of(service.getSystemTimeZone(deviceId))
+                    .map(TimeZone::getTimeZone);
+        }
+        catch (ServiceException exception) {
+            log.warn("Unable to obtain time zone for device {}", deviceId, exception);
+            return Optional.empty();
+        }
     }
 
     @Override

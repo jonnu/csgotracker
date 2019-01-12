@@ -35,7 +35,7 @@ class CSGOTrackerTest {
 
     @Test
     void functionalTeamRoster() throws Exception {
-        ResponseEnvelope response = callAlexaSkill(fixture, teamRosterRequest("astralis"));
+        ResponseEnvelope response = callAlexaSkill(fixture, teamRosterRequest("endpoint"));
         //assertThat(response, containsOutputSpeech("this is first text"));
         System.out.println(response);
     }
